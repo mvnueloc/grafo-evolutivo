@@ -1,9 +1,10 @@
 "use client";
 
 import React from "react";
-import { Input, LetterFx } from "@/once-ui/components";
+import { Input, LetterFx, ToggleButton } from "@/once-ui/components";
 import { useEffect, useState } from "react";
 import { Onest } from "next/font/google";
+import getInfo from "@/info/fetch";
 
 const onest = Onest({
   subsets: ["latin"],
@@ -11,14 +12,32 @@ const onest = Onest({
 
 export default function Home() {
   const [key, setKey] = useState(0);
+  const [value, setValue] = useState("");
+
+  const handleToggle = () => {
+    setValue("");
+    //   const url = new URL("http://localhost:8080/info");
+    //   url.searchParams.append("texto", value);
+
+    //   fetch(url, {
+    //     method: "GET",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   })
+    //     .then((response) => response.json())
+    //     .then((data) => console.log(data))
+    //     .catch((error) => console.error("Error:", error));
+    console.log(getInfo(value));
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
       setKey((prevKey) => prevKey + 1);
     }, 3000);
-
     return () => clearInterval(interval);
   }, []);
+
   return (
     <>
       <main
@@ -31,16 +50,22 @@ export default function Home() {
               Grafo Evolutivo
             </LetterFx>
           </section>
-          <section className="flex justify-center items-center mt-14">
-            <div className="w-[75dvw]">
+          <section className="flex justify-center items-center mt-14 space-x-5">
+            <div className="w-[40dvw]">
               <Input
                 id="example"
                 label="Agrega conocimientos..."
+                value={value}
                 onChange={(e) => {
-                  console.log(e.target.value);
+                  setValue(e.target.value);
                 }}
               />
             </div>
+            <button
+              onClick={handleToggle}
+              className="hover:scale-110 transition-all duration-300">
+              <span>Enviar</span>
+            </button>
           </section>
         </div>
       </main>

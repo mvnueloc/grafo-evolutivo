@@ -5,6 +5,7 @@ import { Input, LetterFx } from "@/once-ui/components";
 import { useEffect, useState } from "react";
 import { Onest } from "next/font/google";
 import { main } from "@/info/fetch";
+import Graph from "@/component/Graph";
 
 const onest = Onest({
   subsets: ["latin"],
@@ -14,11 +15,22 @@ export default function Home() {
   const [key, setKey] = useState(0);
   const [value, setValue] = useState("");
 
+  const [relations, setRelations] = useState<{ id: number; node: string; relation: string; target: string }[]>([]);
+
   const handleToggle = () => {
     setValue("");
     if (value) {
       main(value).then((result) => {
         console.log(result);
+        setRelations((prevRelations) => {
+          const newRelations = result.relationships.map((rel: { node: string; relation: string; target: string }, index: number) => ({
+            id: prevRelations.length + index + 1,
+            node: rel.node,
+            relation: rel.relation,
+            target: rel.target,
+          }));
+          return [...prevRelations, ...newRelations];
+        });
       });
     }
   };
@@ -62,6 +74,7 @@ export default function Home() {
           </section>
         </div>
       </main>
+      <Graph relations={relations} />
     </>
   );
 }

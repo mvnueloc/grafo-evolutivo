@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { Input, LetterFx, ToggleButton } from "@/once-ui/components";
+import { Input, LetterFx } from "@/once-ui/components";
 import { useEffect, useState } from "react";
 import { Onest } from "next/font/google";
-import getInfo from "@/info/fetch";
+import { main } from "@/info/fetch";
 
 const onest = Onest({
   subsets: ["latin"],
@@ -16,19 +16,11 @@ export default function Home() {
 
   const handleToggle = () => {
     setValue("");
-    //   const url = new URL("http://localhost:8080/info");
-    //   url.searchParams.append("texto", value);
-
-    //   fetch(url, {
-    //     method: "GET",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //     .then((response) => response.json())
-    //     .then((data) => console.log(data))
-    //     .catch((error) => console.error("Error:", error));
-    console.log(getInfo(value));
+    if (value) {
+      main(value).then((result) => {
+        console.log(result);
+      });
+    }
   };
 
   useEffect(() => {
@@ -55,6 +47,7 @@ export default function Home() {
               <Input
                 id="example"
                 label="Agrega conocimientos..."
+                required={true}
                 value={value}
                 onChange={(e) => {
                   setValue(e.target.value);

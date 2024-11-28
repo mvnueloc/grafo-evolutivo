@@ -8,9 +8,15 @@ import { baseURL, style, meta, og } from "@/once-ui/resources/config";
 
 import { Background, Flex } from "@/once-ui/components";
 
+import { Onest } from "next/font/google";
+
 type FontConfig = {
   variable: string;
 };
+
+const onest = Onest({
+  subsets: ["latin"],
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const host = (await headers()).get("host");
@@ -83,6 +89,7 @@ export default function RootLayout({
           }}
         />
         <Flex
+          className={`${onest.className}`}
           flex={1}
           direction="column">
           {children}
